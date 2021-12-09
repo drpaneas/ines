@@ -53,7 +53,7 @@ func parseINES(b []byte) Rom {
 	// which handles color emphasis differently from a standard NES PPU.
 	// The detection of which palette a particular game uses is left unspecified.
 	// If present, it's 8192 bytes
-	var consoleType string
+	var consoleType = nes
 	var playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut []byte
 	if hasBit(header[7], 1) {
 		consoleType = playchoice
@@ -120,6 +120,7 @@ func parseINES(b []byte) Rom {
 	}
 
 	return Rom{
+		HeaderType: "iNES 1.0",
 		Headerless:   headerless,
 		Header:       header,
 		Trainer:      trainer,

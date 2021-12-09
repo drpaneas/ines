@@ -181,6 +181,7 @@ func parseINES2(b []byte) Rom {
 	expansionDevice := getDefaultExpansionDevice(header[15] & 0b00111111)
 
 	return Rom{
+		HeaderType: "iNES 2.0",
 		Headerless:      headerless,
 		Header:          header,
 		Trainer:         trainer,

@@ -98,7 +98,7 @@ func parseINES2(b []byte) Rom {
 	// Otherwise, it must be ignored and should be set to zero.
 	mirroring := "Ignored"
 	if hasBit(header[6], 3) {
-		mirroring = "Four-screen VRAM" //  Ignore mirroring control and the mirroring bit
+		mirroring = "Four-screen" //  Ignore mirroring control and the mirroring bit
 	} else {
 		mirroring = "Horizontal or mapper-controlled"
 		if hasBit(header[6], 0) {
@@ -114,8 +114,8 @@ func parseINES2(b []byte) Rom {
 		if shiftCount != 0 {
 			sizeProgramNVRam = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 		}
-
 	}
+	var prgnvram = make([]byte, sizeProgramNVRam)
 
 	// Console Type
 	var consoleType string
@@ -141,6 +141,7 @@ func parseINES2(b []byte) Rom {
 	if readLowNibbleByte(header[10]) != 0 {
 		sizePrgram = 64 << readLowNibbleByte(header[10])
 	}
+	var programRam = make([]byte, sizePrgram)
 
 	// In NES 1.0 an emulator assumes that a ROM image without CHR-ROM, automatically has 8 KiB of CHR-RAM;
 	// But in NES 2.0 all CHR-RAM must instead be explicitly specified in Header byte 11.
@@ -149,11 +150,14 @@ func parseINES2(b []byte) Rom {
 	if shiftCount != 0 {
 		chrramSize = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 	}
+	var chrram = make([]byte, chrramSize)
+
 	var chrnvramSize int
 	shiftCount = int(readHighNibbleByte(header[11]))
 	if shiftCount != 0 {
 		chrnvramSize = 64 << shiftCount
 	}
+	var chrnvram = make([]byte, chrnvramSize)
 
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
 	var tvSystem, cpuppuTiming string
@@ -177,27 +181,26 @@ func parseINES2(b []byte) Rom {
 	expansionDevice := getDefaultExpansionDevice(header[15] & 0b00111111)
 
 	return Rom{
-		Headerless:         headerless,
-		Header:             header,
-		Trainer:            trainer,
-		ProgramRom:         prgrom,
-		CharacterRom:       chrrom,
-		HasBattery:         hasBattery,
-		SizePRGRAM:         sizePrgram,
-		CharacterRamSize:   sizeChrrom,
-		MiscRom:            miscrom,
-		Mapper:             mapper,
-		SubMapper:          subMapper,
-		ConsoleType:        consoleType,
-		Title:              nil,
-		TVSystem:           tvSystem,
-		Mirroring:          mirroring,
-		VsSystemPPU:        vsSystemPPU,
-		VsSystemType:       vsSystemType,
-		CPUPPUTiming:       cpuppuTiming,
-		ExpansionDevice:    expansionDevice,
-		EepromPrgnvramSize: sizeProgramNVRam,
-		ChrramSize:         chrramSize,
-		ChrnvramSize:       chrnvramSize,
+		Headerless:      headerless,
+		Header:          header,
+		Trainer:         trainer,
+		ProgramRom:      prgrom,
+		CharacterRom:    chrrom,
+		MiscRom:         miscrom,
+		HasBattery:      hasBattery,
+		ProgramRam:      programRam,
+		CharacterRam:    chrram,
+		ProgramNVRam:    prgnvram,
+		CharacterNVRam:  chrnvram,
+		Mapper:          mapper,
+		SubMapper:       subMapper,
+		ConsoleType:     consoleType,
+		Title:           nil,
+		TVSystem:        tvSystem,
+		Mirroring:       mirroring,
+		VsSystemPPU:     vsSystemPPU,
+		VsSystemType:    vsSystemType,
+		CPUPPUTiming:    cpuppuTiming,
+		ExpansionDevice: expansionDevice,
 	}
 }

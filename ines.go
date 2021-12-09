@@ -46,6 +46,7 @@ func parseINES(b []byte) Rom {
 	if sizeChrrom == 0 {
 		sizeChrram = 8192
 	}
+	var chrram = make([]byte, sizeChrram)
 
 	// PlayChoice-10 INST-ROM Area is not part of the official specification, and most emulators simply ignores it.
 	// PlayChoice games are designed to look good with the 2C03 RGB PPU
@@ -92,6 +93,7 @@ func parseINES(b []byte) Rom {
 		// as such, virtually no ROM images in circulation make use of it.
 		prgRamBatterySize = 8192 // default is 8 KB
 	}
+	var prgram = make([]byte, prgRamBatterySize)
 
 	// Mapper
 	lowerNibbleMapper := readHighNibbleByte(header[6])
@@ -118,20 +120,20 @@ func parseINES(b []byte) Rom {
 	}
 
 	return Rom{
-		Headerless:       headerless,
-		Header:           header,
-		Trainer:          trainer,
-		ProgramRom:       prgrom,
-		CharacterRom:     chrrom,
-		HasBattery:       hasBatteryPrgRam,
-		SizePRGRAM:       prgRamBatterySize,
-		CharacterRamSize: sizeChrram,
-		MiscRom:          nil,
-		Mapper:           mapper,
-		SubMapper:        0,
-		ConsoleType:      consoleType,
-		TVSystem:         tvSystem,
-		Title:            title,
-		Mirroring:        mirroring,
+		Headerless:   headerless,
+		Header:       header,
+		Trainer:      trainer,
+		ProgramRom:   prgrom,
+		CharacterRom: chrrom,
+		HasBattery:   hasBatteryPrgRam,
+		ProgramRam:   prgram,
+		CharacterRam: chrram,
+		MiscRom:      nil,
+		Mapper:       mapper,
+		SubMapper:    0,
+		ConsoleType:  consoleType,
+		TVSystem:     tvSystem,
+		Title:        title,
+		Mirroring:    mirroring,
 	}
 }

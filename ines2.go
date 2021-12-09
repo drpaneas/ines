@@ -107,10 +107,14 @@ func parseINES2(b []byte) Rom {
 	}
 
 	hasBattery := false
-	var sizeEepromPrgnvram int
+	var sizeProgramNVRam int // If the shift count is zero, PRG-NVRAM or EEPROM (non-volatile) is zero
 	if hasBit(header[6], 1) {
 		hasBattery = true
-		sizeEepromPrgnvram = int(readHighNibbleByte(header[10]))
+		shiftCount := int(readHighNibbleByte(header[10]))
+		if shiftCount != 0 {
+			sizeProgramNVRam = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
+		}
+
 	}
 
 	// Console Type
@@ -143,7 +147,7 @@ func parseINES2(b []byte) Rom {
 	var chrramSize int // If the shift count is zero, there is no CHR-(NV)RAM
 	shiftCount := int(readLowNibbleByte(header[11]))
 	if shiftCount != 0 {
-		chrramSize = 64<<shiftCount	// i.e. that is 8192 bytes for a shift count of 7.
+		chrramSize = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 	}
 	chrnvramSize := int(readHighNibbleByte(header[11]))
 
@@ -188,7 +192,7 @@ func parseINES2(b []byte) Rom {
 		VsSystemType:       vsSystemType,
 		CPUPPUTiming:       cpuppuTiming,
 		ExpansionDevice:    expansionDevice,
-		EepromPrgnvramSize: sizeEepromPrgnvram,
+		EepromPrgnvramSize: sizeProgramNVRam,
 		ChrramSize:         chrramSize,
 		ChrnvramSize:       chrnvramSize,
 	}

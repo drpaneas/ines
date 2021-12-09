@@ -131,7 +131,7 @@ func parseINES2(b []byte) Rom {
 
 	var vsSystemPPU, vsSystemType string
 	if hasBit(header[7], 0) && hasBit(header[7], 1) {
-		consoleType = fmt.Sprintf("Extended: %s", getExtendedConsoleType(header[7]&0b00000011)) // take bit 0 and 1
+		consoleType = fmt.Sprintf("%s", getExtendedConsoleType(header[7]&0b00000011)) // take bit 0 and 1
 		// If it's an extended console then the Vs. System Type has the following PPU and Hardware Type
 		vsSystemPPU = getVsPPUType(readLowNibbleByte(header[13]))
 		vsSystemType = getVsSystemType(readHighNibbleByte(header[13]))

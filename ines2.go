@@ -196,7 +196,6 @@ func parseINES2(b []byte) Rom {
 		Mapper:          mapper,
 		SubMapper:       subMapper,
 		ConsoleType:     consoleType,
-		Title:           nil,
 		TVSystem:        tvSystem,
 		Mirroring:       mirroring,
 		VsSystemPPU:     vsSystemPPU,

@@ -26,33 +26,5 @@ type Rom struct {
 }
 
 func Decode(b []byte) Rom {
-	// Default values
-	var rom = Rom{
-		HeaderType:      "Unknown",
-		Headerless:      []byte{},
-		Header:          []byte{},
-		Trainer:         []byte{},
-		ProgramRom:      []byte{},
-		CharacterRom:    []byte{},
-		HasBattery:      false,
-		ProgramRam:      []byte{},
-		MiscRom:         []byte{},
-		Mapper:          0,
-		SubMapper:       0,
-		ConsoleType:     "Unknown",
-		Title:           []byte{},
-		TVSystem:        "Unknown",
-		Mirroring:       "Unknown",
-		VsSystemPPU:     "Unknown",
-		VsSystemType:    "Unknown",
-		CPUPPUTiming:    "Unknown",
-		ExpansionDevice: "Unknown",
-		CharacterRam:    []byte{},
-		CharacterNVRam:  []byte{},
-		ProgramNVRam:    []byte{},
-	}
-
-	// Parse it properly (iNES 1.0 or iNES 2.0)
-	rom = identifyFmt(b)
-	return rom
+	return identifyFmt(b)
 }

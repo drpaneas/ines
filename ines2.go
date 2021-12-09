@@ -149,7 +149,11 @@ func parseINES2(b []byte) Rom {
 	if shiftCount != 0 {
 		chrramSize = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 	}
-	chrnvramSize := int(readHighNibbleByte(header[11]))
+	var chrnvramSize int
+	shiftCount = int(readHighNibbleByte(header[11]))
+	if shiftCount != 0 {
+		chrnvramSize = 64 << shiftCount
+	}
 
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
 	var tvSystem, cpuppuTiming string

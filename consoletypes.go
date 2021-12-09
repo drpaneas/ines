@@ -1,9 +1,11 @@
 package ines
 
+// https://wiki.nesdev.org/w/index.php/NES_2.0#Extended_Console_Type
+
 const (
-	playchoice = "Nintendo Playchoice 10"
-	vs = "Nintendo Vs System"
-	nes = "Nintendo Entertainment System/Family Computer"
+	playchoice = "Playchoice 10"
+	vs = "Nintendo Vs. System"
+	nes = "Regular NES/Famicom/Dendy"
 )
 
 func getExtendedConsoleType(consoleTypeByte uint8) string {

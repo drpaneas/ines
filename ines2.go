@@ -100,7 +100,7 @@ func parseINES2(b []byte) Rom {
 	if hasBit(header[6], 3) {
 		mirroring = "Four-screen VRAM" //  Ignore mirroring control and the mirroring bit
 	} else {
-		mirroring = "Horizontal or mapper controlled"
+		mirroring = "Horizontal or mapper-controlled"
 		if hasBit(header[6], 0) {
 			mirroring = "Vertical"
 		}
@@ -146,19 +146,19 @@ func parseINES2(b []byte) Rom {
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
 	var tvSystem, cpuppuTiming string
 	if cpuPPUTiming == 0 {
-		cpuppuTiming = "CPU/PPU timing mode: RP2C02 (\"NTSC NES\")"
+		cpuppuTiming = "RP2C02 (\"NTSC NES\")"
 		tvSystem = "North America, Japan, South Korea, Taiwan"
 	} else if cpuPPUTiming == 1 {
-		cpuppuTiming = "CPU/PPU timing mode: RP2C07 (\"Licensed PAL NES\")"
+		cpuppuTiming = "RP2C07 (\"Licensed PAL NES\")"
 		tvSystem = "Western Europe, Australia"
 	} else if cpuPPUTiming == 2 {
-		cpuppuTiming = "CPU/PPU timing mode: Multiple-region"
+		cpuppuTiming = "Multiple-region"
 		tvSystem = "Identical ROM content in both NTSC and PAL countries."
 	} else if cpuPPUTiming == 3 {
-		cpuppuTiming = "CPU/PPU timing mode: UMC 6527P (\"Dendy\")"
+		cpuppuTiming = "UMC 6527P (\"Dendy\")"
 		tvSystem = "Eastern Europe, Russia, Mainland China, India, Africa"
 	} else {
-		cpuppuTiming = "CPU/PPU timing mode: Unknown"
+		cpuppuTiming = "Unknown"
 	}
 
 	// Default Expansion Device

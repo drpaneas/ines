@@ -141,6 +141,9 @@ func parseINES2(b []byte) Rom {
 	// In NES 1.0 an emulator assumes that a ROM image without CHR-ROM, automatically has 8 KiB of CHR-RAM;
 	// But in NES 2.0 all CHR-RAM must instead be explicitly specified in Header byte 11.
 	chrramSize := int(readLowNibbleByte(header[11]))
+	if chrramSize != 0 {
+		chrramSize = 64<<chrramSize
+	}
 	chrnvramSize := int(readHighNibbleByte(header[11]))
 
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)

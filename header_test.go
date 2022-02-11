@@ -1,7 +1,6 @@
 package ines
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -11,7 +10,6 @@ func Test_hasHeader(t *testing.T) {
 		iNES1Header   = []byte{78, 69, 83, 26, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		invalidHeader = []byte{79, 19, 23, 26, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	)
-	fmt.Println(iNES1Header)
 	type args struct {
 		b []byte
 	}

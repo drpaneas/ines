@@ -3,9 +3,10 @@ package ines
 // https://wiki.nesdev.org/w/index.php/NES_2.0#Extended_Console_Type
 
 const (
-	playchoice = "Playchoice 10"
-	vs = "Nintendo Vs. System"
-	nes = "Regular NES/Famicom/Dendy"
+	playchoice         = "Playchoice 10"
+	vs                 = "Nintendo Vs. System"
+	nes                = "Regular NES/Famicom/Dendy"
+	unknownOrUndefined = "Unknown/Undefined"
 )
 
 func getExtendedConsoleType(consoleTypeByte uint8) string {
@@ -29,7 +30,7 @@ func getExtendedConsoleType(consoleTypeByte uint8) string {
 	case 11:
 		return "UMC UM6578"
 	default:
-		return "Unknown/Undefined"
+		return unknownOrUndefined
 	}
 }
 
@@ -50,10 +51,11 @@ func getVsSystemType(vsSystemTypeByte uint8) string {
 	case 6:
 		return "Vs. Dual System (Raid on Bungeling Bay protection)"
 	default:
-		return "Unknown/Undefined"
+		return unknownOrUndefined
 	}
 }
 
+//nolint: funlen
 func getDefaultExpansionDevice(defaultExpansionDeviceByte uint8) string {
 	switch defaultExpansionDeviceByte {
 	case 0:
@@ -163,7 +165,7 @@ func getDefaultExpansionDevice(defaultExpansionDeviceByte uint8) string {
 	case 52:
 		return "Golden Nugget Casino extra buttons"
 	default:
-		return "Unknown/Undefined"
+		return unknownOrUndefined
 	}
 }
 
@@ -196,6 +198,6 @@ func getVsPPUType(vsPPUTypeByte uint8) string {
 	case 12:
 		return "RC2C05-05 ($2002 AND $1F =unknown)"
 	default:
-		return "Unknown/Undefined"
+		return unknownOrUndefined
 	}
 }

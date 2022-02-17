@@ -6,25 +6,18 @@ import (
 	"strings"
 )
 
-func readHighNibbleByte(B byte) byte {
-	B = B >> 4
-	if B > 15 {
-		B = 15
-	}
-	return B
+func readHighNibbleByte(b byte) byte {
+	// To get the high nibble, you shift the value four bits to the right.
+	return b >> 4
 }
 
-func readLowNibbleByte(B byte) byte {
-	B = B << 4
-	B = B >> 4
-	if B > 15 {
-		B = 15
-	}
-	return B
+func readLowNibbleByte(b byte) byte {
+	// To get the low nibble, you mask out the lower four bits.
+	return b & 15
 }
 
 func mergeNibbles(highNibble byte, lowNibble byte) byte {
-	highNibble = highNibble << 4
+	highNibble <<= 4
 	return highNibble | lowNibble
 }
 
@@ -36,7 +29,7 @@ func byteToHex(b byte) string {
 
 func hexToInt(hexStr string) int {
 	// remove 0x suffix if found in the input string
-	cleaned := strings.Replace(hexStr, "0x", "", -1)
+	cleaned := strings.ReplaceAll(hexStr, "0x", "")
 
 	// base 16 for hexadecimal
 	result, _ := strconv.ParseUint(cleaned, 16, 64)

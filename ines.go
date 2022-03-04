@@ -69,7 +69,7 @@ func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, p
 // PlayChoice games are designed to look good with the 2C03 RGB PPU
 // which handles color emphasis differently from a standard NES PPU.
 // The detection of which palette a particular game uses is left unspecified.
-// If present, it's 8192 bytes
+// If present, it's 8192 bytes.
 func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []byte, chrrom []byte) (string, []byte, []byte, []byte) {
 	var consoleType = nes
 	var playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut []byte
@@ -96,7 +96,7 @@ func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []
 
 // getPrgRom data (16384 * x bytes)
 // The PRG-ROM Area follows the Header and the Trainer and precedes the CHR-ROM Area.
-// Size of Program ROM (in 16 KB units)
+// Size of Program ROM (in 16 KB units).
 func getPrgRom(header []byte, headerless []byte, trainer []byte) []byte {
 	var prgrom []byte
 	sizePrgrom := int(header[4]) * 16384
@@ -117,8 +117,8 @@ func getTrainer(b []byte, header []byte) []byte {
 }
 
 // getChrRomAndSize The CHR-ROM Area, if present, follows the Trainer and PRG-ROM Areas and precedes the PlayChoice INST-ROM Area.
-// CHR ROM data, if present (8192 * y bytes)
-// Size of Character ROM (in 8 KB units)
+// CHR ROM data, if present (8192 * y bytes).
+// Size of Character ROM (in 8 KB units).
 func getChrRomAndSize(header []byte, headerless []byte, trainer []byte, prgrom []byte) ([]byte, int) {
 	var chrrom []byte
 	sizeChrrom := int(header[5]) * 8192
@@ -151,7 +151,7 @@ func getTvSystem(header []byte) string {
 	return tvSystem
 }
 
-// getPrgRamIfHasBattery fetches Battery or any other non-volatile memory (PRG RAM)
+// getPrgRamIfHasBattery fetches Battery or any other non-volatile memory (PRG RAM).
 func getPrgRamIfHasBattery(header []byte) (bool, []byte) {
 	hasBatteryPrgRam := false
 	var prgRamBatterySize int
@@ -165,7 +165,7 @@ func getPrgRamIfHasBattery(header []byte) (bool, []byte) {
 	return hasBatteryPrgRam, prgram
 }
 
-// getMapper fetches the mapper
+// getMapper fetches the mapper.
 func getMapper(header []byte) int {
 	lowerNibbleMapper := readHighNibbleByte(header[6])
 	upperNibbleMapper := readHighNibbleByte(header[7])
@@ -173,7 +173,7 @@ func getMapper(header []byte) int {
 	return mapper
 }
 
-// getMirroring fetches the mirror value
+// getMirroring fetches the mirror value.
 func getMirroring(header []byte) string {
 	mirroring := "Ignored"
 	if hasBit(header[6], 3) {

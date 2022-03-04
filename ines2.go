@@ -19,8 +19,8 @@ func parseINES2(b []byte) Rom {
 	consoleType := getConsoleType(header)
 	vsSystemPPU, vsSystemType, consoleType := getPPUSystemAndConsoleTypes(header, consoleType)
 	programRAM := getProgramRAM(header)
-	shiftCount, chrram := getChrRAMAndShiftCount(header)
-	chrnvram := getChrNVRam(shiftCount, header)
+	_, chrram := getChrRAMAndShiftCount(header)
+	chrnvram := getChrNVRam(header)
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
 	tvSystem, cpuppuTiming := getTvSystemAndCPUPpuTiming(cpuPPUTiming)
 	expansionDevice := getDefaultExpansionDevice(header[15] & 0b00111111)
@@ -73,9 +73,9 @@ func getTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 	return msgTV, msgCPU
 }
 
-func getChrNVRam(shiftCount int, header []byte) []byte {
+func getChrNVRam(header []byte) []byte {
 	var chrnvramSize int
-	shiftCount = int(readHighNibbleByte(header[11]))
+	shiftCount := int(readHighNibbleByte(header[11]))
 	if shiftCount != 0 {
 		chrnvramSize = 64 << shiftCount
 	}

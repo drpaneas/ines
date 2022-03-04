@@ -55,7 +55,7 @@ func getVsSystemType(vsSystemTypeByte uint8) string {
 	}
 }
 
-//nolint: funlen
+//nolint: funlen, gocyclo
 func getDefaultExpansionDevice(defaultExpansionDeviceByte uint8) string {
 	switch defaultExpansionDeviceByte {
 	case 0:

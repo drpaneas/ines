@@ -200,9 +200,9 @@ func getPrgRAMIfHasBattery(header []byte) (bool, []byte) {
 
 // getMapper fetches the mapper.
 func getMapper(header []byte) int {
-	lowerNibbleMapper := ReadHighNibbleByte(header[6])
-	upperNibbleMapper := ReadHighNibbleByte(header[7])
-	mapper := byteToInt(MergeNibbles(upperNibbleMapper, lowerNibbleMapper))
+	lowerNibbleMapper := readHighNibbleByte(header[6])
+	upperNibbleMapper := readHighNibbleByte(header[7])
+	mapper := byteToInt(mergeNibbles(upperNibbleMapper, lowerNibbleMapper))
 
 	return mapper
 }

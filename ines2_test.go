@@ -1,9 +1,7 @@
-package ines_test
+package ines // nolint: testpackage
 
 import (
 	"testing"
-
-	"github.com/drpaneas/ines"
 )
 
 const wrongValue = 69
@@ -58,7 +56,7 @@ func Test_getTvSystemAndCPUPpuTiming(t *testing.T) {
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, got1 := ines.GetTvSystemAndCPUPpuTiming(tt2.args.cpuPPUTiming)
+			got, got1 := getTvSystemAndCPUPpuTiming(tt2.args.cpuPPUTiming)
 			if got != tt2.wantTV {
 				t.Errorf("getTvSystemAndCPUPpuTiming() got = %v, want %v", got, tt2.wantTV)
 			}

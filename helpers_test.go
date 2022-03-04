@@ -1,9 +1,7 @@
-package ines_test
+package ines // nolint: testpackage
 
 import (
 	"testing"
-
-	"github.com/drpaneas/ines"
 )
 
 func Test_readHighNibbleByte(t *testing.T) {
@@ -29,7 +27,7 @@ func Test_readHighNibbleByte(t *testing.T) {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ines.ReadHighNibbleByte(tt2.args.b); got != tt2.want {
+			if got := readHighNibbleByte(tt2.args.b); got != tt2.want {
 				t.Errorf("readHighNibbleByte() = %v, want %v", got, tt2.want)
 			}
 		})
@@ -59,8 +57,8 @@ func Test_readLowNibbleByte(t *testing.T) {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ines.ReadLowNibbleByte(tt2.args.b); got != tt2.want {
-				t.Errorf("ReadLowNibbleByte() = %v, want %v", got, tt2.want)
+			if got := readLowNibbleByte(tt2.args.b); got != tt2.want {
+				t.Errorf("readLowNibbleByte() = %v, want %v", got, tt2.want)
 			}
 		})
 	}
@@ -82,8 +80,8 @@ func Test_mergeNibbles(t *testing.T) {
 		{
 			name: "00101000",
 			args: args{
-				highNibble: ines.ReadHighNibbleByte(0b00101000),
-				lowNibble:  ines.ReadLowNibbleByte(0b00101000),
+				highNibble: readHighNibbleByte(0b00101000),
+				lowNibble:  readLowNibbleByte(0b00101000),
 			},
 			want: 0b00101000,
 		},
@@ -93,7 +91,7 @@ func Test_mergeNibbles(t *testing.T) {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ines.MergeNibbles(tt2.args.highNibble, tt2.args.lowNibble); got != tt2.want {
+			if got := mergeNibbles(tt2.args.highNibble, tt2.args.lowNibble); got != tt2.want {
 				t.Errorf("mergeNibbles() = %v, want %v", got, tt2.want)
 			}
 		})

@@ -23,7 +23,7 @@ func parseINES2(b []byte) Rom {
 	_, chrram := getChrRAMAndShiftCount(header)
 	chrnvram := getChrNVRam(header)
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
-	tvSystem, cpuppuTiming := GetTvSystemAndCPUPpuTiming(cpuPPUTiming)
+	tvSystem, cpuppuTiming := getTvSystemAndCPUPpuTiming(cpuPPUTiming)
 	expansionDevice := getDefaultExpansionDevice(header[15] & 0b00111111)
 
 	// nolint: exhaustivestruct
@@ -53,7 +53,7 @@ func parseINES2(b []byte) Rom {
 }
 
 // nolint: gomnd
-func GetTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
+func getTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 	var msgTV, msgCPU string
 
 	switch cpuPPUTiming {
@@ -81,7 +81,7 @@ func GetTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 func getChrNVRam(header []byte) []byte {
 	var chrnvramSize int
 
-	shiftCount := int(ReadHighNibbleByte(header[11]))
+	shiftCount := int(readHighNibbleByte(header[11]))
 
 	if shiftCount != 0 {
 		chrnvramSize = 64 << shiftCount
@@ -99,7 +99,7 @@ func getChrNVRam(header []byte) []byte {
 func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 	var chrramSize int // If the shift count is zero, there is no CHR-(NV)RAM
 
-	shiftCount := int(ReadLowNibbleByte(header[11]))
+	shiftCount := int(readLowNibbleByte(header[11]))
 
 	if shiftCount != 0 {
 		chrramSize = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
@@ -114,8 +114,8 @@ func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 func getProgramRAM(header []byte) []byte {
 	var sizePrgram int
 
-	if ReadLowNibbleByte(header[10]) != 0 {
-		sizePrgram = 64 << ReadLowNibbleByte(header[10])
+	if readLowNibbleByte(header[10]) != 0 {
+		sizePrgram = 64 << readLowNibbleByte(header[10])
 	}
 
 	programRAM := make([]byte, sizePrgram)
@@ -130,8 +130,8 @@ func getPPUSystemAndConsoleTypes(header []byte, consoleType string) (string, str
 	if hasBit(header[7], 0) && hasBit(header[7], 1) {
 		consoleType = getExtendedConsoleType(header[7] & 0b00000011) // take bit 0 and 1
 		// If it's an extended console then the Vs. System Type has the following PPU and Hardware Type
-		vsSystemPPU = getVsPPUType(ReadLowNibbleByte(header[13]))
-		vsSystemType = getVsSystemType(ReadHighNibbleByte(header[13]))
+		vsSystemPPU = getVsPPUType(readLowNibbleByte(header[13]))
+		vsSystemType = getVsSystemType(readHighNibbleByte(header[13]))
 	}
 
 	return vsSystemPPU, vsSystemType, consoleType
@@ -164,7 +164,7 @@ func getPrgNVRamIfHasBattery(header []byte) (bool, []byte) {
 	if hasBit(header[6], 1) {
 		hasBattery = true
 
-		shiftCount := int(ReadHighNibbleByte(header[10]))
+		shiftCount := int(readHighNibbleByte(header[10]))
 
 		if shiftCount != 0 {
 			sizeProgramNVRam = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
@@ -194,12 +194,12 @@ func getMirroring2(header []byte) (mirroring string) {
 }
 
 func getMappers(header []byte) (int, int) {
-	mapper1 := ReadHighNibbleByte(header[6]) // Lower bits of mapper
-	mapper2 := ReadHighNibbleByte(header[7]) // Upper bits of mapper
-	mapper3 := ReadLowNibbleByte(header[8])
-	mapper := int(binary.LittleEndian.Uint16([]byte{MergeNibbles(mapper2, mapper1), mapper3}))
+	mapper1 := readHighNibbleByte(header[6]) // Lower bits of mapper
+	mapper2 := readHighNibbleByte(header[7]) // Upper bits of mapper
+	mapper3 := readLowNibbleByte(header[8])
+	mapper := int(binary.LittleEndian.Uint16([]byte{mergeNibbles(mapper2, mapper1), mapper3}))
 	// SubMapper number
-	subMapper := int(ReadHighNibbleByte(header[8]))
+	subMapper := int(readHighNibbleByte(header[8]))
 
 	return mapper, subMapper
 }
@@ -241,7 +241,7 @@ func getChrRom2(header []byte, headerless []byte, trainer []byte, prgrom []byte)
 		chrrom     []byte
 	)
 
-	MSBNibbleByte9 := ReadHighNibbleByte(header[9])
+	MSBNibbleByte9 := readHighNibbleByte(header[9])
 
 	if byteToHex(MSBNibbleByte9) == "0F" {
 		E := (header[5] & 0b11111100) >> 2
@@ -274,7 +274,7 @@ func getPrgRom2(header []byte, headerless []byte, trainer []byte) []byte {
 		sizeOfPrgRom int
 	)
 
-	MSNibbleByte9 := ReadLowNibbleByte(header[9])
+	MSNibbleByte9 := readLowNibbleByte(header[9])
 
 	if byteToHex(MSNibbleByte9) == "0F" {
 		E := (header[4] & 0b11111100) >> 2

@@ -1,9 +1,7 @@
-package ines_test
+package ines // nolint: testpackage
 
 import (
 	"testing"
-
-	"github.com/drpaneas/ines"
 )
 
 func Test_hasHeader(t *testing.T) {
@@ -50,8 +48,8 @@ func Test_hasHeader(t *testing.T) {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ines.HasHeader(tt2.args.b); got != tt2.want {
-				t.Errorf("HasHeader() = %v, want %v", got, tt2.want)
+			if got := hasHeader(tt2.args.b); got != tt2.want {
+				t.Errorf("hasHeader() = %v, want %v", got, tt2.want)
 			}
 		})
 	}
@@ -93,8 +91,8 @@ func Test_isINES2(t *testing.T) {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ines.IsINES2(tt2.args.b); got != tt2.want {
-				t.Errorf("IsINES2() = %v, want %v", got, tt2.want)
+			if got := isINES2(tt2.args.b); got != tt2.want {
+				t.Errorf("isINES2() = %v, want %v", got, tt2.want)
 			}
 		})
 	}

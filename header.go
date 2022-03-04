@@ -6,14 +6,14 @@ import (
 	"encoding/hex"
 )
 
-// HasHeader returns true if input starts with 'NES^Z' (Hex equiv: 0x4e 0x45 0x53 0x1a).
-func HasHeader(b []byte) bool {
+// hasHeader returns true if input starts with 'NES^Z' (Hex equiv: 0x4e 0x45 0x53 0x1a).
+func hasHeader(b []byte) bool {
 	return bytes.HasPrefix(b, bytes.Trim(hexBytes("4e 45 53 1a"), " "))
 }
 
-// IsINES2 returns true if the 7th Byte has bit-3 set and bit-2 off.
+// isINES2 returns true if the 7th Byte has bit-3 set and bit-2 off.
 // nolint: gomnd
-func IsINES2(b []byte) bool {
+func isINES2(b []byte) bool {
 	return hasBit(b[7], 3) && !hasBit(b[7], 2)
 }
 

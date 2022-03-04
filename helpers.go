@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-func ReadHighNibbleByte(b byte) byte {
+func readHighNibbleByte(b byte) byte {
 	// To get the high nibble, you shift the value four bits to the right.
 	return b >> 4 // nolint: gomnd
 }
 
-func ReadLowNibbleByte(b byte) byte {
+func readLowNibbleByte(b byte) byte {
 	// To get the low nibble, you mask out the lower four bits.
 	return b & 15 // nolint: gomnd
 }
 
-func MergeNibbles(highNibble byte, lowNibble byte) byte {
+func mergeNibbles(highNibble byte, lowNibble byte) byte {
 	highNibble <<= 4
 
 	return highNibble | lowNibble

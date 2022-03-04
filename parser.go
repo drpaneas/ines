@@ -6,9 +6,8 @@ func identifyFmt(b []byte) Rom {
 	if hasHeader(b) {
 		if isINES2(b) {
 			return parseINES2(b)
-		} else {
-			return parseINES(b)
 		}
+		return parseINES(b)
 	}
 	return Rom{}
 }

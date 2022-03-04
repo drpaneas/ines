@@ -40,9 +40,10 @@ func Test_hasHeader(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := hasHeader(tt.args.b); got != tt.want {
-				t.Errorf("hasHeader() = %v, want %v", got, tt.want)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			if got := hasHeader(tt2.args.b); got != tt2.want {
+				t.Errorf("hasHeader() = %v, want %v", got, tt2.want)
 			}
 		})
 	}
@@ -77,9 +78,10 @@ func Test_isINES2(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := isINES2(tt.args.b); got != tt.want {
-				t.Errorf("isINES2() = %v, want %v", got, tt.want)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			if got := isINES2(tt2.args.b); got != tt2.want {
+				t.Errorf("isINES2() = %v, want %v", got, tt2.want)
 			}
 		})
 	}

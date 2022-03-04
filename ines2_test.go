@@ -46,13 +46,14 @@ func Test_getTvSystemAndCPUPpuTiming(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := getTvSystemAndCPUPpuTiming(tt.args.cpuPPUTiming)
-			if got != tt.wantTV {
-				t.Errorf("getTvSystemAndCPUPpuTiming() got = %v, want %v", got, tt.wantTV)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			got, got1 := getTvSystemAndCPUPpuTiming(tt2.args.cpuPPUTiming)
+			if got != tt2.wantTV {
+				t.Errorf("getTvSystemAndCPUPpuTiming() got = %v, want %v", got, tt2.wantTV)
 			}
-			if got1 != tt.wantCPU {
-				t.Errorf("getTvSystemAndCPUPpuTiming() got1 = %v, want %v", got1, tt.wantCPU)
+			if got1 != tt2.wantCPU {
+				t.Errorf("getTvSystemAndCPUPpuTiming() got1 = %v, want %v", got1, tt2.wantCPU)
 			}
 		})
 	}

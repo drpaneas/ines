@@ -18,9 +18,10 @@ func Test_readHighNibbleByte(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := readHighNibbleByte(tt.args.b); got != tt.want {
-				t.Errorf("readHighNibbleByte() = %v, want %v", got, tt.want)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			if got := readHighNibbleByte(tt2.args.b); got != tt2.want {
+				t.Errorf("readHighNibbleByte() = %v, want %v", got, tt2.want)
 			}
 		})
 	}
@@ -42,9 +43,10 @@ func Test_readLowNibbleByte(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := readLowNibbleByte(tt.args.b); got != tt.want {
-				t.Errorf("readLowNibbleByte() = %v, want %v", got, tt.want)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			if got := readLowNibbleByte(tt2.args.b); got != tt2.want {
+				t.Errorf("readLowNibbleByte() = %v, want %v", got, tt2.want)
 			}
 		})
 	}
@@ -70,9 +72,10 @@ func Test_mergeNibbles(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := mergeNibbles(tt.args.highNibble, tt.args.lowNibble); got != tt.want {
-				t.Errorf("mergeNibbles() = %v, want %v", got, tt.want)
+		tt2 := tt
+		t.Run(tt2.name, func(t *testing.T) {
+			if got := mergeNibbles(tt2.args.highNibble, tt2.args.lowNibble); got != tt2.want {
+				t.Errorf("mergeNibbles() = %v, want %v", got, tt2.want)
 			}
 		})
 	}

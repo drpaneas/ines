@@ -20,7 +20,7 @@ type Rom struct {
 	VsSystemType    string
 	CPUPPUTiming    string
 	ExpansionDevice string
-	CharacterRam    []byte
+	CharacterRAM    []byte
 	CharacterNVRam  []byte
 	ProgramNVRam    []byte // EEPROM/Non-volatile Program RAM
 }

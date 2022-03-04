@@ -44,7 +44,7 @@ func parseINES(b []byte) Rom {
 		VsSystemType:    "Unknown",
 		CPUPPUTiming:    "Unknown",
 		ExpansionDevice: "Unknown",
-		CharacterRam:    chrram,
+		CharacterRAM:    chrram,
 		CharacterNVRam:  []byte{},
 		ProgramNVRam:    []byte{},
 	}

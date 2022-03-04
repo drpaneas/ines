@@ -7,7 +7,9 @@ func identifyFmt(b []byte) Rom {
 		if isINES2(b) {
 			return parseINES2(b)
 		}
+
 		return parseINES(b)
 	}
+
 	return Rom{}
 }

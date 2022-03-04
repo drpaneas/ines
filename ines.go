@@ -68,6 +68,7 @@ func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, p
 	if leftover := len(headerless) - len(trainer) + len(prgrom) + len(chrrom) + len(playChoiceInstRom) + len(playChoicePROMData) + len(playChoiceRomCounterOut); leftover != 0 {
 		title = headerless[len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+len(playChoicePROMData)+len(playChoiceRomCounterOut):]
 	}
+
 	return title
 }
 
@@ -102,6 +103,7 @@ func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []
 	if hasBit(header[7], 0) {
 		consoleType = vs
 	}
+
 	return consoleType, playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut
 }
 
@@ -112,6 +114,7 @@ func getPrgRom(header []byte, headerless []byte, trainer []byte) []byte {
 	var prgrom []byte
 	sizePrgrom := int(header[4]) * 16384
 	prgrom = headerless[len(trainer) : len(trainer)+sizePrgrom] // if trainer is 0, this will still work
+
 	return prgrom
 }
 
@@ -125,6 +128,7 @@ func getTrainer(b []byte, header []byte) []byte {
 	if hasBit(header[6], 2) {
 		trainer = b[16:528] // starts from b[16] and has 512 bytes length, so it goes up to b[16+512]
 	}
+
 	return trainer
 }
 
@@ -136,6 +140,7 @@ func getChrRomAndSize(header []byte, headerless []byte, trainer []byte, prgrom [
 	var chrrom []byte
 	sizeChrrom := int(header[5]) * 8192
 	chrrom = headerless[len(trainer)+len(prgrom) : len(trainer)+len(prgrom)+sizeChrrom]
+
 	return chrrom, sizeChrrom
 }
 
@@ -149,7 +154,9 @@ func getChrRAM(sizeChrrom int) []byte {
 	if sizeChrrom == 0 {
 		sizeChrram = 8192
 	}
+
 	var chrram = make([]byte, sizeChrram)
+
 	return chrram
 }
 
@@ -161,6 +168,7 @@ func getTvSystem(header []byte) string {
 	if hasBit(header[9], 0) {
 		tvSystem = "PAL"
 	}
+
 	return tvSystem
 }
 
@@ -174,7 +182,9 @@ func getPrgRAMIfHasBattery(header []byte) (bool, []byte) {
 		// as such, virtually no ROM images in circulation make use of it.
 		prgRAMBatterySize = 8192 // default is 8 KB
 	}
+
 	var prgram = make([]byte, prgRAMBatterySize)
+
 	return hasBatteryPrgRAM, prgram
 }
 
@@ -183,6 +193,7 @@ func getMapper(header []byte) int {
 	lowerNibbleMapper := readHighNibbleByte(header[6])
 	upperNibbleMapper := readHighNibbleByte(header[7])
 	mapper := byteToInt(mergeNibbles(upperNibbleMapper, lowerNibbleMapper))
+
 	return mapper
 }
 
@@ -198,5 +209,6 @@ func getMirroring(header []byte) string {
 			mirroring = "Vertical"
 		}
 	}
+
 	return mirroring
 }

@@ -82,7 +82,9 @@ func getChrNVRam(header []byte) []byte {
 	if shiftCount != 0 {
 		chrnvramSize = 64 << shiftCount
 	}
+
 	var chrnvram = make([]byte, chrnvramSize)
+
 	return chrnvram
 }
 
@@ -96,7 +98,9 @@ func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 	if shiftCount != 0 {
 		chrramSize = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 	}
+
 	var chrram = make([]byte, chrramSize)
+
 	return shiftCount, chrram
 }
 
@@ -106,7 +110,9 @@ func getProgramRAM(header []byte) []byte {
 	if readLowNibbleByte(header[10]) != 0 {
 		sizePrgram = 64 << readLowNibbleByte(header[10])
 	}
+
 	var programRAM = make([]byte, sizePrgram)
+
 	return programRAM
 }
 
@@ -119,6 +125,7 @@ func getPPUSystemAndConsoleTypes(header []byte, consoleType string) (string, str
 		vsSystemPPU = getVsPPUType(readLowNibbleByte(header[13]))
 		vsSystemType = getVsSystemType(readHighNibbleByte(header[13]))
 	}
+
 	return vsSystemPPU, vsSystemType, consoleType
 }
 
@@ -127,12 +134,15 @@ func getConsoleType(header []byte) string {
 	if !hasBit(header[7], 0) && !hasBit(header[7], 1) {
 		consoleType = nes
 	}
+
 	if hasBit(header[7], 0) && !hasBit(header[7], 1) {
 		consoleType = vs
 	}
+
 	if !hasBit(header[7], 0) && hasBit(header[7], 1) {
 		consoleType = playchoice
 	}
+
 	return consoleType
 }
 
@@ -147,7 +157,9 @@ func getPrgNVRamIfHasBattery(header []byte) (bool, []byte) {
 			sizeProgramNVRam = 64 << shiftCount // i.e. that is 8192 bytes for a shift count of 7.
 		}
 	}
+
 	var prgnvram = make([]byte, sizeProgramNVRam)
+
 	return hasBattery, prgnvram
 }
 
@@ -165,6 +177,7 @@ func getMirroring2(header []byte) string {
 			mirroring = "Vertical"
 		}
 	}
+
 	return mirroring
 }
 
@@ -175,6 +188,7 @@ func getMappers(header []byte) (int, int) {
 	mapper := int(binary.LittleEndian.Uint16([]byte{mergeNibbles(mapper2, mapper1), mapper3}))
 	// SubMapper number
 	subMapper := int(readHighNibbleByte(header[8]))
+
 	return mapper, subMapper
 }
 
@@ -196,6 +210,7 @@ func getMiscRom(header []byte, trainer []byte, prgrom []byte, chrrom []byte, hea
 		start := len(trainer) + len(prgrom) + len(chrrom)
 		miscrom = headerless[start:]
 	}
+
 	return miscrom
 }
 
@@ -221,6 +236,7 @@ func getChrRom2(header []byte, headerless []byte, trainer []byte, prgrom []byte)
 	}
 
 	chrrom = headerless[len(trainer)+len(prgrom) : len(trainer)+len(prgrom)+sizeChrrom]
+
 	return chrrom
 }
 
@@ -249,6 +265,7 @@ func getPrgRom2(header []byte, headerless []byte, trainer []byte) []byte {
 	}
 
 	prgrom = headerless[len(trainer) : len(trainer)+sizeOfPrgRom] // if trainer is 0, this will still work
+
 	return prgrom
 }
 
@@ -269,5 +286,6 @@ func getTrainer2(b []byte, header []byte) []byte {
 		high := low + 512 // trainer has always fixed 512 bytes size
 		trainer = b[low:high]
 	}
+
 	return trainer
 }

@@ -24,6 +24,7 @@ func mergeNibbles(highNibble byte, lowNibble byte) byte {
 func byteToHex(b byte) string {
 	bs := make([]byte, 1)
 	bs[0] = b
+
 	return strings.ToUpper(hex.EncodeToString(bs))
 }
 
@@ -34,6 +35,7 @@ func hexToInt(hexStr string) int {
 
 	// base 16 for hexadecimal
 	result, _ := strconv.ParseUint(cleaned, 16, 64)
+
 	return int(result)
 }
 

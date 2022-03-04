@@ -1,13 +1,20 @@
-package ines
+package ines_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/drpaneas/ines"
+)
 
 const wrongValue = 69
 
 func Test_getTvSystemAndCPUPpuTiming(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		cpuPPUTiming int
 	}
+
 	tests := []struct {
 		name    string
 		args    args
@@ -45,10 +52,13 @@ func Test_getTvSystemAndCPUPpuTiming(t *testing.T) {
 			wantCPU: "Multiple-region",
 		},
 	}
+
 	for _, tt := range tests {
 		tt2 := tt
 		t.Run(tt2.name, func(t *testing.T) {
-			got, got1 := getTvSystemAndCPUPpuTiming(tt2.args.cpuPPUTiming)
+			t.Parallel()
+
+			got, got1 := ines.GetTvSystemAndCPUPpuTiming(tt2.args.cpuPPUTiming)
 			if got != tt2.wantTV {
 				t.Errorf("getTvSystemAndCPUPpuTiming() got = %v, want %v", got, tt2.wantTV)
 			}

@@ -9,7 +9,7 @@ const (
 	unknownOrUndefined = "Unknown/Undefined"
 )
 
-// nolint: gomnd
+// nolint: gomnd, cyclop
 func getExtendedConsoleType(consoleTypeByte uint8) string {
 	switch consoleTypeByte {
 	case 3:
@@ -57,7 +57,7 @@ func getVsSystemType(vsSystemTypeByte uint8) string {
 	}
 }
 
-//nolint: funlen, gocyclo, gomnd
+//nolint: funlen, gocyclo, gomnd, cyclop
 func getDefaultExpansionDevice(defaultExpansionDeviceByte uint8) string {
 	switch defaultExpansionDeviceByte {
 	case 0:
@@ -171,7 +171,7 @@ func getDefaultExpansionDevice(defaultExpansionDeviceByte uint8) string {
 	}
 }
 
-// nolint: gomnd
+// nolint: gomnd, cyclop
 func getVsPPUType(vsPPUTypeByte uint8) string {
 	switch vsPPUTypeByte {
 	case 0:

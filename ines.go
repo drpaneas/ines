@@ -80,8 +80,13 @@ func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, p
 // If present, it's 8192 bytes.
 // nolint: lll, gomnd
 func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []byte, chrrom []byte) (string, []byte, []byte, []byte) {
-	var consoleType = nes
-	var playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut []byte
+	var (
+		consoleType             = nes
+		playChoiceInstRom       []byte
+		playChoicePROMData      []byte
+		playChoiceRomCounterOut []byte
+	)
+
 	if hasBit(header[7], 1) {
 		consoleType = playchoice
 		playChoiceInstRomSize := 8192
@@ -100,6 +105,7 @@ func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []
 		// nolint: lll
 		playChoiceRomCounterOut = headerless[len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+len(playChoicePROMData) : len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+len(playChoicePROMData)+playChoiceRomCounterOutSize]
 	}
+
 	if hasBit(header[7], 0) {
 		consoleType = vs
 	}
@@ -112,7 +118,8 @@ func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []
 // Size of Program ROM (in 16 KB units).
 func getPrgRom(header []byte, headerless []byte, trainer []byte) []byte {
 	var prgrom []byte
-	sizePrgrom := int(header[4]) * 16384
+
+	sizePrgrom := int(header[4]) * 16384                        // nolint: gomnd
 	prgrom = headerless[len(trainer) : len(trainer)+sizePrgrom] // if trainer is 0, this will still work
 
 	return prgrom
@@ -138,7 +145,9 @@ func getTrainer(b []byte, header []byte) []byte {
 // Size of Character ROM (in 8 KB units).
 func getChrRomAndSize(header []byte, headerless []byte, trainer []byte, prgrom []byte) ([]byte, int) {
 	var chrrom []byte
-	sizeChrrom := int(header[5]) * 8192
+
+	sizeChrrom := int(header[5]) * 8192 // nolint: gomnd
+
 	chrrom = headerless[len(trainer)+len(prgrom) : len(trainer)+len(prgrom)+sizeChrrom]
 
 	return chrrom, sizeChrrom
@@ -155,7 +164,7 @@ func getChrRAM(sizeChrrom int) []byte {
 		sizeChrram = 8192
 	}
 
-	var chrram = make([]byte, sizeChrram)
+	chrram := make([]byte, sizeChrram)
 
 	return chrram
 }
@@ -174,8 +183,9 @@ func getTvSystem(header []byte) string {
 
 // getPrgRAMIfHasBattery fetches Battery or any other non-volatile memory (PRG RAM).
 func getPrgRAMIfHasBattery(header []byte) (bool, []byte) {
-	hasBatteryPrgRAM := false
 	var prgRAMBatterySize int
+
+	hasBatteryPrgRAM := false
 	if hasBit(header[6], 1) {
 		hasBatteryPrgRAM = true
 		// The PRG RAM Size value (stored in byte 8) was recently added to the official specification;
@@ -183,24 +193,23 @@ func getPrgRAMIfHasBattery(header []byte) (bool, []byte) {
 		prgRAMBatterySize = 8192 // default is 8 KB
 	}
 
-	var prgram = make([]byte, prgRAMBatterySize)
+	prgram := make([]byte, prgRAMBatterySize)
 
 	return hasBatteryPrgRAM, prgram
 }
 
 // getMapper fetches the mapper.
 func getMapper(header []byte) int {
-	lowerNibbleMapper := readHighNibbleByte(header[6])
-	upperNibbleMapper := readHighNibbleByte(header[7])
-	mapper := byteToInt(mergeNibbles(upperNibbleMapper, lowerNibbleMapper))
+	lowerNibbleMapper := ReadHighNibbleByte(header[6])
+	upperNibbleMapper := ReadHighNibbleByte(header[7])
+	mapper := byteToInt(MergeNibbles(upperNibbleMapper, lowerNibbleMapper))
 
 	return mapper
 }
 
 // getMirroring fetches the mirror value.
 // nolint: gomnd
-func getMirroring(header []byte) string {
-	mirroring := "Ignored"
+func getMirroring(header []byte) (mirroring string) {
 	if hasBit(header[6], 3) {
 		mirroring = "Four-screen VRAM" //  Ignore mirroring control and the mirroring bit
 	} else {

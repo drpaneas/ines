@@ -51,23 +51,25 @@ func parseINES2(b []byte) Rom {
 }
 
 func getTvSystemAndCpuPpuTiming(cpuPPUTiming int) (string, string) {
-	var tvSystem, cpuppuTiming string
-	if cpuPPUTiming == 0 {
-		cpuppuTiming = "RP2C02 (\"NTSC NES\")"
-		tvSystem = "North America, Japan, South Korea, Taiwan"
-	} else if cpuPPUTiming == 1 {
-		cpuppuTiming = "RP2C07 (\"Licensed PAL NES\")"
-		tvSystem = "Western Europe, Australia"
-	} else if cpuPPUTiming == 2 {
-		cpuppuTiming = "Multiple-region"
-		tvSystem = "Identical ROM content in both NTSC and PAL countries."
-	} else if cpuPPUTiming == 3 {
-		cpuppuTiming = "UMC 6527P (\"Dendy\")"
-		tvSystem = "Eastern Europe, Russia, Mainland China, India, Africa"
-	} else {
-		cpuppuTiming = "Unknown"
+	var msgTV, msgCPU string
+	switch cpuPPUTiming {
+	case 0:
+		msgCPU = "RP2C02 (\"NTSC NES\")"
+		msgTV = "North America, Japan, South Korea, Taiwan"
+	case 1:
+		msgCPU = "RP2C07 (\"Licensed PAL NES\")"
+		msgTV = "Western Europe, Australia"
+	case 2:
+		msgCPU = "Multiple-region"
+		msgTV = "Identical ROM content in both NTSC and PAL countries."
+	case 3:
+		msgCPU = "UMC 6527P (\"Dendy\")"
+		msgTV = "Eastern Europe, Russia, Mainland China, India, Africa"
+	default:
+		msgCPU = "Unknown"
 	}
-	return tvSystem, cpuppuTiming
+
+	return msgTV, msgCPU
 }
 
 func getChrNVRam(shiftCount int, header []byte) []byte {

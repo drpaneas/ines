@@ -77,7 +77,7 @@ func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, p
 // which handles color emphasis differently from a standard NES PPU.
 // The detection of which palette a particular game uses is left unspecified.
 // If present, it's 8192 bytes.
-// nolint: lll
+// nolint: lll, gomnd
 func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []byte, chrrom []byte) (string, []byte, []byte, []byte) {
 	var consoleType = nes
 	var playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut []byte
@@ -119,6 +119,7 @@ func getPrgRom(header []byte, headerless []byte, trainer []byte) []byte {
 // It contains data to be loaded into CPU memory at 0x7000
 // It is only used by some games that were modified to run on different hardware from the original cartridges,
 // such as early RAM cartridges and emulators, adding some compatibility code into those address ranges.
+// nolint: gomnd
 func getTrainer(b []byte, header []byte) []byte {
 	var trainer []byte
 	if hasBit(header[6], 2) {
@@ -186,6 +187,7 @@ func getMapper(header []byte) int {
 }
 
 // getMirroring fetches the mirror value.
+// nolint: gomnd
 func getMirroring(header []byte) string {
 	mirroring := "Ignored"
 	if hasBit(header[6], 3) {

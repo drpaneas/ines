@@ -8,12 +8,12 @@ import (
 
 func readHighNibbleByte(b byte) byte {
 	// To get the high nibble, you shift the value four bits to the right.
-	return b >> 4
+	return b >> 4 // nolint: gomnd
 }
 
 func readLowNibbleByte(b byte) byte {
 	// To get the low nibble, you mask out the lower four bits.
-	return b & 15
+	return b & 15 // nolint: gomnd
 }
 
 func mergeNibbles(highNibble byte, lowNibble byte) byte {
@@ -27,6 +27,7 @@ func byteToHex(b byte) string {
 	return strings.ToUpper(hex.EncodeToString(bs))
 }
 
+// nolint: gomnd
 func hexToInt(hexStr string) int {
 	// remove 0x suffix if found in the input string
 	cleaned := strings.ReplaceAll(hexStr, "0x", "")

@@ -6,6 +6,7 @@ import (
 	"math"
 )
 
+// nolint: gomnd
 func parseINES2(b []byte) Rom {
 	headerless := b[16:] // without header
 	header := b[:16]     // header 16 bytes
@@ -50,6 +51,7 @@ func parseINES2(b []byte) Rom {
 	}
 }
 
+// nolint: gomnd
 func getTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 	var msgTV, msgCPU string
 	switch cpuPPUTiming {
@@ -73,6 +75,7 @@ func getTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 	return msgTV, msgCPU
 }
 
+// nolint: gomnd
 func getChrNVRam(header []byte) []byte {
 	var chrnvramSize int
 	shiftCount := int(readHighNibbleByte(header[11]))
@@ -86,6 +89,7 @@ func getChrNVRam(header []byte) []byte {
 // getChrRAMAndShiftCount
 // In NES 1.0 an emulator assumes that a ROM image without CHR-ROM, automatically has 8 KiB of CHR-RAM;
 // But in NES 2.0 all CHR-RAM must instead be explicitly specified in Header byte 11.
+// nolint: gomnd
 func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 	var chrramSize int // If the shift count is zero, there is no CHR-(NV)RAM
 	shiftCount := int(readLowNibbleByte(header[11]))
@@ -96,6 +100,7 @@ func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 	return shiftCount, chrram
 }
 
+// nolint: gomnd
 func getProgramRAM(header []byte) []byte {
 	var sizePrgram int
 	if readLowNibbleByte(header[10]) != 0 {
@@ -105,6 +110,7 @@ func getProgramRAM(header []byte) []byte {
 	return programRAM
 }
 
+// nolint: gomnd
 func getPPUSystemAndConsoleTypes(header []byte, consoleType string) (string, string, string) {
 	var vsSystemPPU, vsSystemType string
 	if hasBit(header[7], 0) && hasBit(header[7], 1) {
@@ -130,6 +136,7 @@ func getConsoleType(header []byte) string {
 	return consoleType
 }
 
+// nolint: gomnd
 func getPrgNVRamIfHasBattery(header []byte) (bool, []byte) {
 	hasBattery := false
 	var sizeProgramNVRam int // If the shift count is zero, PRG-NVRAM or EEPROM (non-volatile) is zero
@@ -147,6 +154,7 @@ func getPrgNVRamIfHasBattery(header []byte) (bool, []byte) {
 // getMirroring2
 // Header Byte 6 bit 0 is relevant only if the mapper does not allow the mirroring type to be switched.
 // Otherwise, it must be ignored and should be set to zero.
+// nolint: gomnd
 func getMirroring2(header []byte) string {
 	mirroring := "Ignored"
 	if hasBit(header[6], 3) {
@@ -181,6 +189,7 @@ The meaning of this data depends on the console type and mapper type;
 Header byte 14 is used to denote the presence of the Miscellaneous ROM Area and
 the number of ROM chips in case any disambiguation is needed.
 */
+// nolint: gomnd
 func getMiscRom(header []byte, trainer []byte, prgrom []byte, chrrom []byte, headerless []byte) []byte {
 	var miscrom []byte
 	if (header[14] & 0b00000011) != 0 {
@@ -197,6 +206,7 @@ func getMiscRom(header []byte, trainer []byte, prgrom []byte, chrrom []byte, hea
 	Header byte 5 (LSB) and bits 4-7 of Header byte 9 (MSB) specify its size.
 	If the MSB nibble is $0-E, LSB and MSB together simply specify the CHR-ROM size in 8 KiB units:
 */
+// nolint: gomnd
 func getChrRom2(header []byte, headerless []byte, trainer []byte, prgrom []byte) []byte {
 	var sizeChrrom int
 	var chrrom []byte
@@ -224,6 +234,7 @@ func getChrRom2(header []byte, headerless []byte, trainer []byte, prgrom []byte)
 	// Size of PRG ROM in 16 KB units
 	// The PRG-ROM Area follows the 16-byte Header and the Trainer Area (if exists) and precedes the CHR-ROM Area.
 */
+// nolint: gomnd
 func getPrgRom2(header []byte, headerless []byte, trainer []byte) []byte {
 	var prgrom []byte
 	var sizeOfPrgRom int
@@ -250,6 +261,7 @@ func getPrgRom2(header []byte, headerless []byte, trainer []byte) []byte {
 	such as early RAM cartridges and emulators, adding some compatibility code into those address ranges.
 	Trainer is placed between header and PRG ROM data, so PRG ROM should start in the next avail address
 */
+// nolint: gomnd
 func getTrainer2(b []byte, header []byte) []byte {
 	var trainer []byte
 	if hasBit(header[6], 2) {

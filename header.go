@@ -12,6 +12,7 @@ func hasHeader(b []byte) bool {
 }
 
 // isINES2 returns true if the 7th Byte has bit-3 set and bit-2 off.
+// nolint: gomnd
 func isINES2(b []byte) bool {
 	return hasBit(b[7], 3) && !hasBit(b[7], 2)
 }

@@ -61,7 +61,7 @@ func getTvSystemAndCpuPpuTiming(cpuPPUTiming int) (string, string) {
 		msgTV = "Western Europe, Australia"
 	case 2:
 		msgCPU = "Multiple-region"
-		msgTV = "Identical ROM content in both NTSC and PAL countries."
+		msgTV = "Identical ROM content in both NTSC and PAL countries"
 	case 3:
 		msgCPU = "UMC 6527P (\"Dendy\")"
 		msgTV = "Eastern Europe, Russia, Mainland China, India, Africa"

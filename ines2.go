@@ -67,6 +67,7 @@ func getTvSystemAndCpuPpuTiming(cpuPPUTiming int) (string, string) {
 		msgTV = "Eastern Europe, Russia, Mainland China, India, Africa"
 	default:
 		msgCPU = "Unknown"
+		msgTV = "Unknown"
 	}
 
 	return msgTV, msgCPU

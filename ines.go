@@ -1,14 +1,17 @@
 package ines
 
-// An iNES file consists of the following sections, in order:
+/*
+An iNES file consists of the following sections, in order:
 
-// 1. Header (16 bytes)
-// 2. Trainer, if present (0 or 512 bytes)
-// 3. PRG ROM data (16384 * x bytes)
-// 4. CHR ROM data, if present (8192 * y bytes)
-// 5. PlayChoice INST-ROM, if present (0 or 8192 bytes)
-// 6. PlayChoice PROM, if present (16 bytes Data, 16 bytes CounterOut) (this is often missing, see PC10 ROM-Images for details)
-// 7. Some ROM-Images additionally contain a 128-byte (or sometimes 127-byte) title at the end of the file.
+1. Header (16 bytes)
+2. Trainer, if present (0 or 512 bytes)
+3. PRG ROM data (16384 * x bytes)
+4. CHR ROM data, if present (8192 * y bytes)
+5. PlayChoice INST-ROM, if present (0 or 8192 bytes)
+6. PlayChoice PROM, if present (16 bytes Data, 16 bytes CounterOut)
+	* however, this ^^^ is often missing, see PC10 ROM-Images for details *
+7. Some ROM-Images additionally contain a 128-byte (or sometimes 127-byte) title at the end of the file.
+*/
 
 func parseINES(b []byte) Rom {
 	headerless := b[16:] // rom without header. It's useful for calculating checksums.
@@ -17,6 +20,8 @@ func parseINES(b []byte) Rom {
 	prgrom := getPrgRom(header, headerless, trainer)
 	chrrom, sizeChrrom := getChrRomAndSize(header, headerless, trainer, prgrom)
 	chrram := getChrRAM(sizeChrrom)
+
+	// nolint: lll
 	consoleType, playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut := getConsoleTypes(header, headerless, trainer, prgrom, chrrom)
 	title := getTitle(headerless, trainer, prgrom, chrrom, playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut)
 	hasBatteryPrgRAM, prgram := getPrgRAMIfHasBattery(header)
@@ -50,12 +55,14 @@ func parseINES(b []byte) Rom {
 	}
 }
 
-// getTitles fetches the game's name
+// getTitle fetches the game's name
 // Some ROM-Images additionally contain a 128-byte (or sometimes 127-byte) title at the end of the file.
 // This is an additional block of data appended to the end of the rom that's not read by the emulator and has the title
 // of the game in ascii/half-width katakana and so would be ideal to categorize ROMs.
-// Sadly this idea never really was applied for most rom dumps but if one really wanted they could go through their collection of roms and add that title block so that future tools parsing such info could find something inside the rom to recognize.
-
+// Sadly this idea never really was applied for most rom dumps
+// but if one really wanted they could go through their collection of roms and add that title block
+// so that future tools parsing such info could find something inside the rom to recognize.
+// nolint: lll
 func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, playChoiceInstRom []byte, playChoicePROMData []byte, playChoiceRomCounterOut []byte) []byte {
 	var title []byte
 	if leftover := len(headerless) - len(trainer) + len(prgrom) + len(chrrom) + len(playChoiceInstRom) + len(playChoicePROMData) + len(playChoiceRomCounterOut); leftover != 0 {
@@ -70,6 +77,7 @@ func getTitle(headerless []byte, trainer []byte, prgrom []byte, chrrom []byte, p
 // which handles color emphasis differently from a standard NES PPU.
 // The detection of which palette a particular game uses is left unspecified.
 // If present, it's 8192 bytes.
+// nolint: lll
 func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []byte, chrrom []byte) (string, []byte, []byte, []byte) {
 	var consoleType = nes
 	var playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut []byte
@@ -82,10 +90,13 @@ func getConsoleTypes(header []byte, headerless []byte, trainer []byte, prgrom []
 		// PlayChoice PROM , if present (16 bytes Data, 16 bytes CounterOut)
 		// 16 bytes RP5H01 PROM Data output (needed to decrypt the INST ROM)
 		playChoicePROMDataSize := 8192 * 2
+		// nolint: lll
 		playChoicePROMData = headerless[len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom) : len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+playChoicePROMDataSize]
 
-		// 16 bytes RP5H01 PROM CounterOut output (needed to decrypt the INST ROM) (usually constant: 00,00,00,00,FF,FF,FF,FF,00,00,00,00,FF,FF,FF,FF)
+		// 16 bytes RP5H01 PROM CounterOut output (needed to decrypt the INST ROM)
+		// usually constant: 00,00,00,00,FF,FF,FF,FF,00,00,00,00,FF,FF,FF,FF
 		playChoiceRomCounterOutSize := 8192 * 2
+		// nolint: lll
 		playChoiceRomCounterOut = headerless[len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+len(playChoicePROMData) : len(trainer)+len(prgrom)+len(chrrom)+len(playChoiceInstRom)+len(playChoicePROMData)+playChoiceRomCounterOutSize]
 	}
 	if hasBit(header[7], 0) {
@@ -116,7 +127,8 @@ func getTrainer(b []byte, header []byte) []byte {
 	return trainer
 }
 
-// getChrRomAndSize The CHR-ROM Area, if present, follows the Trainer and PRG-ROM Areas and precedes the PlayChoice INST-ROM Area.
+// getChrRomAndSize The CHR-ROM Area, if present, follows the Trainer and PRG-ROM Areas
+// and precedes the PlayChoice INST-ROM Area.
 // CHR ROM data, if present (8192 * y bytes).
 // Size of Character ROM (in 8 KB units).
 func getChrRomAndSize(header []byte, headerless []byte, trainer []byte, prgrom []byte) ([]byte, int) {

@@ -13,14 +13,14 @@ func hasHeader(b []byte) bool {
 
 // isINES2 returns true if the 7th Byte has bit-3 set and bit-2 off.
 func isINES2(b []byte) bool {
-	return hasBit(b[7],3) && !hasBit(b[7],2)
+	return hasBit(b[7], 3) && !hasBit(b[7], 2)
 }
 
 // hasBit returns true if b byte has bit-p set.
 func hasBit(b byte, p uint8) bool {
-	return b & (1 <<p) > 0
+	return b&(1<<p) > 0
 }
 
 func hexBytes(h string) []byte {
-	return func(b []byte, _ error) []byte {return b}(hex.DecodeString(h))
+	return func(b []byte, _ error) []byte { return b }(hex.DecodeString(h))
 }

@@ -16,10 +16,10 @@ func parseINES(b []byte) Rom {
 	trainer := getTrainer(b, header)
 	prgrom := getPrgRom(header, headerless, trainer)
 	chrrom, sizeChrrom := getChrRomAndSize(header, headerless, trainer, prgrom)
-	chrram := getChrRam(sizeChrrom)
+	chrram := getChrRAM(sizeChrrom)
 	consoleType, playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut := getConsoleTypes(header, headerless, trainer, prgrom, chrrom)
 	title := getTitle(headerless, trainer, prgrom, chrrom, playChoiceInstRom, playChoicePROMData, playChoiceRomCounterOut)
-	hasBatteryPrgRam, prgram := getPrgRamIfHasBattery(header)
+	hasBatteryPrgRAM, prgram := getPrgRAMIfHasBattery(header)
 	mapper := getMapper(header)
 	mirroring := getMirroring(header)
 	tvSystem := getTvSystem(header)
@@ -31,8 +31,8 @@ func parseINES(b []byte) Rom {
 		Trainer:         trainer,
 		ProgramRom:      prgrom,
 		CharacterRom:    chrrom,
-		HasBattery:      hasBatteryPrgRam,
-		ProgramRam:      prgram,
+		HasBattery:      hasBatteryPrgRAM,
+		programRAM:      prgram,
 		MiscRom:         []byte{},
 		Mapper:          mapper,
 		SubMapper:       0,
@@ -126,12 +126,12 @@ func getChrRomAndSize(header []byte, headerless []byte, trainer []byte, prgrom [
 	return chrrom, sizeChrrom
 }
 
-// getChrRam If CHR ROM size is 0; it means the board uses 8 KB CHR RAM
+// getChrRAM If CHR ROM size is 0; it means the board uses 8 KB CHR RAM
 // The ROM file doesn't contain RAM contents (since they'd be lost at power-off anyhow).
 // CHR RAM is located at the normal place in the PPU's memory map.
 // So, the CPU will set the PPU's VRAM pointer, and just start writing data to the input port.
 // Games with CHR ROM need to ignore this "write". Games with CHR RAM need to accept it.
-func getChrRam(sizeChrrom int) []byte {
+func getChrRAM(sizeChrrom int) []byte {
 	var sizeChrram int
 	if sizeChrrom == 0 {
 		sizeChrram = 8192
@@ -151,18 +151,18 @@ func getTvSystem(header []byte) string {
 	return tvSystem
 }
 
-// getPrgRamIfHasBattery fetches Battery or any other non-volatile memory (PRG RAM).
-func getPrgRamIfHasBattery(header []byte) (bool, []byte) {
-	hasBatteryPrgRam := false
-	var prgRamBatterySize int
+// getPrgRAMIfHasBattery fetches Battery or any other non-volatile memory (PRG RAM).
+func getPrgRAMIfHasBattery(header []byte) (bool, []byte) {
+	hasBatteryPrgRAM := false
+	var prgRAMBatterySize int
 	if hasBit(header[6], 1) {
-		hasBatteryPrgRam = true
+		hasBatteryPrgRAM = true
 		// The PRG RAM Size value (stored in byte 8) was recently added to the official specification;
 		// as such, virtually no ROM images in circulation make use of it.
-		prgRamBatterySize = 8192 // default is 8 KB
+		prgRAMBatterySize = 8192 // default is 8 KB
 	}
-	var prgram = make([]byte, prgRamBatterySize)
-	return hasBatteryPrgRam, prgram
+	var prgram = make([]byte, prgRAMBatterySize)
+	return hasBatteryPrgRAM, prgram
 }
 
 // getMapper fetches the mapper.

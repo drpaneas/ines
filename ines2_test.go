@@ -4,7 +4,7 @@ import "testing"
 
 const wrongValue = 69
 
-func Test_getTvSystemAndCpuPpuTiming(t *testing.T) {
+func Test_getTvSystemAndCPUPpuTiming(t *testing.T) {
 	type args struct {
 		cpuPPUTiming int
 	}
@@ -47,12 +47,12 @@ func Test_getTvSystemAndCpuPpuTiming(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := getTvSystemAndCpuPpuTiming(tt.args.cpuPPUTiming)
+			got, got1 := getTvSystemAndCPUPpuTiming(tt.args.cpuPPUTiming)
 			if got != tt.wantTV {
-				t.Errorf("getTvSystemAndCpuPpuTiming() got = %v, want %v", got, tt.wantTV)
+				t.Errorf("getTvSystemAndCPUPpuTiming() got = %v, want %v", got, tt.wantTV)
 			}
 			if got1 != tt.wantCPU {
-				t.Errorf("getTvSystemAndCpuPpuTiming() got1 = %v, want %v", got1, tt.wantCPU)
+				t.Errorf("getTvSystemAndCPUPpuTiming() got1 = %v, want %v", got1, tt.wantCPU)
 			}
 		})
 	}

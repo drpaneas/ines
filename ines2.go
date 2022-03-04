@@ -18,11 +18,11 @@ func parseINES2(b []byte) Rom {
 	hasBattery, prgnvram := getPrgNVRamIfHasBattery(header)
 	consoleType := getConsoleType(header)
 	vsSystemPPU, vsSystemType, consoleType := getPPUSystemAndConsoleTypes(header, consoleType)
-	programRam := getProgramRam(header)
-	shiftCount, chrram := getChrRamAndShiftCount(header)
+	programRAM := getProgramRAM(header)
+	shiftCount, chrram := getChrRAMAndShiftCount(header)
 	chrnvram := getChrNVRam(shiftCount, header)
 	cpuPPUTiming := byteToInt(header[12] & 0b0000011)
-	tvSystem, cpuppuTiming := getTvSystemAndCpuPpuTiming(cpuPPUTiming)
+	tvSystem, cpuppuTiming := getTvSystemAndCPUPpuTiming(cpuPPUTiming)
 	expansionDevice := getDefaultExpansionDevice(header[15] & 0b00111111)
 
 	return Rom{
@@ -34,7 +34,7 @@ func parseINES2(b []byte) Rom {
 		CharacterRom:    chrrom,
 		MiscRom:         miscrom,
 		HasBattery:      hasBattery,
-		ProgramRam:      programRam,
+		programRAM:      programRAM,
 		CharacterRam:    chrram,
 		ProgramNVRam:    prgnvram,
 		CharacterNVRam:  chrnvram,
@@ -50,7 +50,7 @@ func parseINES2(b []byte) Rom {
 	}
 }
 
-func getTvSystemAndCpuPpuTiming(cpuPPUTiming int) (string, string) {
+func getTvSystemAndCPUPpuTiming(cpuPPUTiming int) (string, string) {
 	var msgTV, msgCPU string
 	switch cpuPPUTiming {
 	case 0:
@@ -83,10 +83,10 @@ func getChrNVRam(shiftCount int, header []byte) []byte {
 	return chrnvram
 }
 
-// getChrRamAndShiftCount
+// getChrRAMAndShiftCount
 // In NES 1.0 an emulator assumes that a ROM image without CHR-ROM, automatically has 8 KiB of CHR-RAM;
 // But in NES 2.0 all CHR-RAM must instead be explicitly specified in Header byte 11.
-func getChrRamAndShiftCount(header []byte) (int, []byte) {
+func getChrRAMAndShiftCount(header []byte) (int, []byte) {
 	var chrramSize int // If the shift count is zero, there is no CHR-(NV)RAM
 	shiftCount := int(readLowNibbleByte(header[11]))
 	if shiftCount != 0 {
@@ -96,13 +96,13 @@ func getChrRamAndShiftCount(header []byte) (int, []byte) {
 	return shiftCount, chrram
 }
 
-func getProgramRam(header []byte) []byte {
+func getProgramRAM(header []byte) []byte {
 	var sizePrgram int
 	if readLowNibbleByte(header[10]) != 0 {
 		sizePrgram = 64 << readLowNibbleByte(header[10])
 	}
-	var programRam = make([]byte, sizePrgram)
-	return programRam
+	var programRAM = make([]byte, sizePrgram)
+	return programRAM
 }
 
 func getPPUSystemAndConsoleTypes(header []byte, consoleType string) (string, string, string) {

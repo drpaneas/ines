@@ -1,5 +1,6 @@
 [![Go](https://github.com/drpaneas/ines/actions/workflows/go.yml/badge.svg)](https://github.com/drpaneas/ines/actions/workflows/go.yml)
 [![golangci-lint](https://github.com/drpaneas/ines/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/drpaneas/ines/actions/workflows/golangci-lint.yml)
+[![CodeQL](https://github.com/drpaneas/ines/actions/workflows/codeql.yml/badge.svg)](https://github.com/drpaneas/ines/actions/workflows/codeql.yml)
 
 # iNES Go Library
 

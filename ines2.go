@@ -36,7 +36,7 @@ func parseINES2(b []byte) Rom {
 		CharacterRom:    chrrom,
 		MiscRom:         miscrom,
 		HasBattery:      hasBattery,
-		programRAM:      programRAM,
+		ProgramRAM:      programRAM,
 		CharacterRAM:    chrram,
 		ProgramNVRam:    prgnvram,
 		CharacterNVRam:  chrnvram,

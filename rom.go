@@ -8,7 +8,7 @@ type Rom struct {
 	ProgramRom      []byte // Memory chip connected to the CPU. Contains the code.
 	CharacterRom    []byte // Memory chip connected to the PPU. Contains a fixed set of graphics tile data.
 	HasBattery      bool   // Rare: There may be an additional chip like that to hold even more data.
-	programRAM      []byte
+	ProgramRAM      []byte
 	MiscRom         []byte
 	Mapper          int
 	SubMapper       int
